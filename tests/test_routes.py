@@ -124,3 +124,9 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
+    def test_security_headers(self):
+        """Test that security headers are present"""
+        response = self.client.get("/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("X-Frame-Options", response.headers)
+        self.assertIn("Access-Control-Allow-Origin", response.headers)
