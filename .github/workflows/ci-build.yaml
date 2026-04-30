@@ -12,6 +12,9 @@ jobs:
 
     container: python:3.9-slim
 
+    env:
+      DATABASE_URI: postgresql://postgres:postgres@postgres:5432/postgres
+
     services:
       postgres:
         image: postgres:13
