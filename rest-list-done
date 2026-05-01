@@ -1,0 +1,2 @@
+curl http://localhost:8000/accounts
+[{"address":"Semarang","date_joined":"2026-05-01","email":"hadi@example.com","id":1,"name":"hadi","phone_number":null},{"address":"Semarang","date_joined":"2026-05-01","email":"hadi@example.com","id":2,"name":"hadi","phone_number":null}]
