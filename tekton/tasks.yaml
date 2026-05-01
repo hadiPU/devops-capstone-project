@@ -2,18 +2,18 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: echo
+  name: flake8
 spec:
-  description: This task will echo the message.
-  params:
-    - name: message
-      description: The message to echo
-      type: string
+  workspaces:
+    - name: source
   steps:
-    - name: echo-message
-      image: alpine:3
-      command: [/bin/echo]
-      args: ["$(params.message)"]
+    - name: lint
+      image: python:3.9-slim
+      workingDir: $(workspaces.source.path)
+      script: |
+        pip install flake8
+        flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 service --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -50,3 +50,21 @@ spec:
           rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
         fi
 
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: nosetests
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: test
+      image: python:3.9-slim
+      workingDir: $(workspaces.source.path)
+      script: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install nose
+        nosetests
